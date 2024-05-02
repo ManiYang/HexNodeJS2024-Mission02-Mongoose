@@ -2,3 +2,14 @@
 
 GET {{host}}/posts
 
+###
+
+POST {{host}}/posts
+Content-Type: application/json
+
+{
+    "name": "Albert",
+    "tags": ["測試"],
+    "type": "person",
+    "content": "test..."
+}
