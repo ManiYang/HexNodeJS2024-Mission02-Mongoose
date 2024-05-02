@@ -66,7 +66,57 @@ function httpListener(req, res) {
     });
 
     //
+    if (req.url === "/posts" && req.method === "GET") {
+        respondAsSuccessful(res, []); // test
+    }
+    // else if (req.url === "/todos" && req.method === "POST") {
+    //     req.on("end", () => {
+    //         try {
+    //             const title = getTitleFromReqBody(body);
+    //             const id = uuidv4();
+    //             todos.push({ title, id });
+    //             respondAsSuccessful(res, todos);
+    //         } catch (error) {
+    //             respondAsFailed(res, 400, error.message);
+    //         }
+    //     });
+    // }
+    // else if (req.url === "/todos" && req.method === "DELETE") {
+    //     todos.length = 0;
+    //     respondAsSuccessful(res, todos);
+    // }
+    // else if (req.url.startsWith("/todos/") && req.method === "DELETE") {
+    //     try {
+    //         const id = req.url.split("/").pop();
+    //         const index = findTodoIndexById(todos, id);
+    //         todos.splice(index, 1);
+    //         respondAsSuccessful(res, todos);
+    //     } catch (error) {
+    //         respondAsFailed(res, 400, error.message);
+    //     }
+    // }
+    // else if (req.url.startsWith("/todos/") && req.method === "PATCH") {
+    //     req.on("end", () => {
+    //         try {
+    //             const title = getTitleFromReqBody(body);
 
+    //             const id = req.url.split("/").pop();
+    //             const index = findTodoIndexById(todos, id);
+
+    //             todos[index].title = title;
+
+    //             respondAsSuccessful(res, todos);
+    //         } catch (error) {
+    //             respondAsFailed(res, 400, error.message);
+    //         }
+    //     });
+    // }
+    else if (req.method === "OPTIONS") {
+        respondAsSuccessful(res, null);
+    }
+    else {
+        respondAsFailed(res, 404, "無此路由");
+    }
 }
 
 http.createServer(httpListener).listen(httpListenPort);
