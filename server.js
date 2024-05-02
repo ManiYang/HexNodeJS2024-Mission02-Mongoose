@@ -1,7 +1,8 @@
 const dotenv = require("dotenv");
 const http = require("http");
 const mongoose = require("mongoose");
-const { v4: uuidv4 } = require("uuid");
+
+const Post = require("model/posts");
 
 dotenv.config({ path: "./config.env" });
 
@@ -59,7 +60,7 @@ function respondAsFailed(res, statusCode, message) {
     res.end();
 }
 
-function httpListener(req, res) {
+async function httpListener(req, res) {
     let body = "";
     req.on("data", (chunck) => { 
         body += chunck; 
@@ -67,20 +68,20 @@ function httpListener(req, res) {
 
     //
     if (req.url === "/posts" && req.method === "GET") {
-        respondAsSuccessful(res, []); // test
+        result = await Post.find();
+        respondAsSuccessful(res, result); 
     }
-    // else if (req.url === "/todos" && req.method === "POST") {
-    //     req.on("end", () => {
-    //         try {
-    //             const title = getTitleFromReqBody(body);
-    //             const id = uuidv4();
-    //             todos.push({ title, id });
-    //             respondAsSuccessful(res, todos);
-    //         } catch (error) {
-    //             respondAsFailed(res, 400, error.message);
-    //         }
-    //     });
-    // }
+    else if (req.url === "/posts" && req.method === "POST") {
+        req.on("end", async () => {
+            try {
+                const post = JSON.parse(body);
+                const newPost = await Post.create(post);
+                respondAsSuccessful(res, newPost);
+            } catch (error) {
+                respondAsFailed(res, 400, error.message);
+            }
+        });
+    }
     // else if (req.url === "/todos" && req.method === "DELETE") {
     //     todos.length = 0;
     //     respondAsSuccessful(res, todos);
