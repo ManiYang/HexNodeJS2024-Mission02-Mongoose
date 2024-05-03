@@ -82,20 +82,19 @@ async function httpListener(req, res) {
             }
         });
     }
-    // else if (req.url === "/todos" && req.method === "DELETE") {
-    //     todos.length = 0;
-    //     respondAsSuccessful(res, todos);
-    // }
-    // else if (req.url.startsWith("/todos/") && req.method === "DELETE") {
-    //     try {
-    //         const id = req.url.split("/").pop();
-    //         const index = findTodoIndexById(todos, id);
-    //         todos.splice(index, 1);
-    //         respondAsSuccessful(res, todos);
-    //     } catch (error) {
-    //         respondAsFailed(res, 400, error.message);
-    //     }
-    // }
+    else if (req.url === "/posts" && req.method === "DELETE") {
+        const result = await Post.deleteMany({});
+        respondAsSuccessful(res, result);
+    }
+    else if (req.url.startsWith("/posts/") && req.method === "DELETE") {
+        try {
+            const id = req.url.split("/").pop();
+            const deletedPost = await Post.findByIdAndDelete(id);
+            respondAsSuccessful(res, deletedPost);
+        } catch (error) {
+            respondAsFailed(res, 400, error.message);
+        }
+    }
     // else if (req.url.startsWith("/todos/") && req.method === "PATCH") {
     //     req.on("end", () => {
     //         try {
