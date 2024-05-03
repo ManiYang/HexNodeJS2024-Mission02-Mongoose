@@ -60,6 +60,19 @@ function respondAsFailed(res, statusCode, message) {
     res.end();
 }
 
+function handleRequestBody(bodyStr) {
+    bodyObj = JSON.parse(bodyStr);
+
+    if (typeof bodyObj.name === "string") {
+        bodyObj.name = bodyObj.name.trim();
+    }
+    if (typeof bodyObj.content === "string") {
+        bodyObj.content = bodyObj.content.trim();
+    }
+
+    return bodyObj;
+}
+
 async function httpListener(req, res) {
     let body = "";
     req.on("data", (chunck) => { 
@@ -74,7 +87,7 @@ async function httpListener(req, res) {
     else if (req.url === "/posts" && req.method === "POST") {
         req.on("end", async () => {
             try {
-                const post = JSON.parse(body);
+                const post = handleRequestBody(body);
                 const newPost = await Post.create(post);
                 respondAsSuccessful(res, newPost);
             } catch (error) {
@@ -93,7 +106,7 @@ async function httpListener(req, res) {
             if (deletedPost === null) {
                 throw new Error("找不到指定 ID 的貼文");
             }
-            
+
             respondAsSuccessful(res, deletedPost);
         } catch (error) {
             respondAsFailed(res, 400, error.message);
@@ -105,7 +118,7 @@ async function httpListener(req, res) {
                 const id = req.url.split("/").pop();
                 const updatedPost = await Post.findByIdAndUpdate(
                     id, 
-                    JSON.parse(body), 
+                    handleRequestBody(body),
                     { new: true, runValidators: true }
                 );
                 if (updatedPost === null) {

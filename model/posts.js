@@ -28,7 +28,7 @@ const postSchema = new mongoose.Schema(
         },
         content: {
             type: String,
-            required: [true, "content 未填寫"],
+            required: [true, "貼文內容 content 未填寫"],
         },
         likes: {
             type: Number,

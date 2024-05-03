@@ -8,10 +8,10 @@ POST {{host}}/posts
 Content-Type: application/json
 
 {
-    "name": "Albert",
+    "name": "albert",
     "tags": ["測試"],
     "type": "person",
-    "content": ""
+    "content": "   test "
 }
 
 ###
