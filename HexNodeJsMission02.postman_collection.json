@@ -1,0 +1,129 @@
+{
+	"info": {
+		"_postman_id": "3a8ee7b4-7f78-4d79-9d77-4009138df08a",
+		"name": "hex node.js mission02",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33232213"
+	},
+	"item": [
+		{
+			"name": "get all posts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://hexnodejs2024-mission02-mongoose.onrender.com/posts",
+					"protocol": "https",
+					"host": [
+						"hexnodejs2024-mission02-mongoose",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete all posts",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://hexnodejs2024-mission02-mongoose.onrender.com/posts",
+					"protocol": "https",
+					"host": [
+						"hexnodejs2024-mission02-mongoose",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete single post",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://hexnodejs2024-mission02-mongoose.onrender.com/posts",
+					"protocol": "https",
+					"host": [
+						"hexnodejs2024-mission02-mongoose",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add a post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"albert\",\r\n    \"tags\": [\"測試\"],\r\n    \"type\": \"group\",\r\n    \"content\": \" 測試訊息... \"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hexnodejs2024-mission02-mongoose.onrender.com/posts",
+					"protocol": "https",
+					"host": [
+						"hexnodejs2024-mission02-mongoose",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update a post",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\": \" updated content... \"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hexnodejs2024-mission02-mongoose.onrender.com/posts/1234",
+					"protocol": "https",
+					"host": [
+						"hexnodejs2024-mission02-mongoose",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"posts",
+						"1234"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
