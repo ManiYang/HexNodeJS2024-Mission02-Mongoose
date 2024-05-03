@@ -3,6 +3,7 @@ const http = require("http");
 const mongoose = require("mongoose");
 
 const Post = require("./model/posts");
+const { respondSuccessful, respondFailed } = require("./respond");
 
 dotenv.config({ path: "./config.env" });
 
@@ -20,45 +21,6 @@ mongoose.connect(connectionString).then(() => {
 // HTTP server
 
 const httpListenPort = process.env.PORT || 3005;
-
-const responseHeaders = {
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization, Content-Length, X-Requested-With',
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'PATCH, POST, GET,OPTIONS,DELETE',
-    'Content-Type': 'application/json'
-};
-
-/**
- * Sends "successful" response.
- * @param {*} res 
- * @param {*} data If is not `null`, this is the value of key "data" in the response body. 
- *                 If is `null`, the response has no body.
- */
-function respondAsSuccessful(res, data) {
-    res.writeHead(200, responseHeaders);
-    if (data !== null) {
-        res.write(JSON.stringify({
-            status: "sucessful",
-            data: data
-        }));
-    }
-    res.end();
-}
-
-/**
- * Sends "failed" response.
- * @param {*} res 
- * @param {Number} statusCode 
- * @param {String} message 
- */
-function respondAsFailed(res, statusCode, message) {
-    res.writeHead(statusCode, responseHeaders);
-    res.write(JSON.stringify({
-        status: "failed",
-        message: message
-    }));
-    res.end();
-}
 
 function handleRequestBody(bodyStr) {
     bodyObj = JSON.parse(bodyStr);
@@ -82,22 +44,22 @@ async function httpListener(req, res) {
     //
     if (req.url === "/posts" && req.method === "GET") {
         result = await Post.find();
-        respondAsSuccessful(res, result); 
+        respondSuccessful(res, result); 
     }
     else if (req.url === "/posts" && req.method === "POST") {
         req.on("end", async () => {
             try {
                 const post = handleRequestBody(body);
                 const newPost = await Post.create(post);
-                respondAsSuccessful(res, newPost);
+                respondSuccessful(res, newPost);
             } catch (error) {
-                respondAsFailed(res, 400, error.message);
+                respondFailed(res, 400, error.message);
             }
         });
     }
     else if (req.url === "/posts" && req.method === "DELETE") {
         const result = await Post.deleteMany({});
-        respondAsSuccessful(res, result);
+        respondSuccessful(res, result);
     }
     else if (req.url.startsWith("/posts/") && req.method === "DELETE") {
         try {
@@ -107,9 +69,9 @@ async function httpListener(req, res) {
                 throw new Error("找不到指定 ID 的貼文");
             }
 
-            respondAsSuccessful(res, deletedPost);
+            respondSuccessful(res, deletedPost);
         } catch (error) {
-            respondAsFailed(res, 400, error.message);
+            respondFailed(res, 400, error.message);
         }
     }
     else if (req.url.startsWith("/posts/") && req.method === "PATCH") {
@@ -125,17 +87,17 @@ async function httpListener(req, res) {
                     throw new Error("找不到指定 ID 的貼文");
                 }
 
-                respondAsSuccessful(res, updatedPost);
+                respondSuccessful(res, updatedPost);
             } catch (error) {
-                respondAsFailed(res, 400, error.message);
+                respondFailed(res, 400, error.message);
             }
         });
     }
     else if (req.method === "OPTIONS") {
-        respondAsSuccessful(res, null);
+        respondSuccessful(res, null);
     }
     else {
-        respondAsFailed(res, 404, "無此路由");
+        respondFailed(res, 404, "無此路由");
     }
 }
 
