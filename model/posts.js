@@ -7,10 +7,9 @@ const postSchema = new mongoose.Schema(
             required: [true, "貼文姓名 name 未填寫"],
         },
         tags: [
-            // <-----------------
             {
                 type: String,
-                required: [true, "貼文標籤 tags 未填寫"],
+                required: [true, "貼文標籤 必須是非空字串"],
             },
         ],
         type: {
