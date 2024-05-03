@@ -90,27 +90,34 @@ async function httpListener(req, res) {
         try {
             const id = req.url.split("/").pop();
             const deletedPost = await Post.findByIdAndDelete(id);
+            if (deletedPost === null) {
+                throw new Error("找不到指定 ID 的貼文");
+            }
+            
             respondAsSuccessful(res, deletedPost);
         } catch (error) {
             respondAsFailed(res, 400, error.message);
         }
     }
-    // else if (req.url.startsWith("/todos/") && req.method === "PATCH") {
-    //     req.on("end", () => {
-    //         try {
-    //             const title = getTitleFromReqBody(body);
+    else if (req.url.startsWith("/posts/") && req.method === "PATCH") {
+        req.on("end", async () => {
+            try {
+                const id = req.url.split("/").pop();
+                const updatedPost = await Post.findByIdAndUpdate(
+                    id, 
+                    JSON.parse(body), 
+                    { new: true, runValidators: true }
+                );
+                if (updatedPost === null) {
+                    throw new Error("找不到指定 ID 的貼文");
+                }
 
-    //             const id = req.url.split("/").pop();
-    //             const index = findTodoIndexById(todos, id);
-
-    //             todos[index].title = title;
-
-    //             respondAsSuccessful(res, todos);
-    //         } catch (error) {
-    //             respondAsFailed(res, 400, error.message);
-    //         }
-    //     });
-    // }
+                respondAsSuccessful(res, updatedPost);
+            } catch (error) {
+                respondAsFailed(res, 400, error.message);
+            }
+        });
+    }
     else if (req.method === "OPTIONS") {
         respondAsSuccessful(res, null);
     }

@@ -11,7 +11,7 @@ Content-Type: application/json
     "name": "Albert",
     "tags": ["測試"],
     "type": "person",
-    "content": "test again"
+    "content": ""
 }
 
 ###
@@ -22,4 +22,12 @@ DELETE {{host}}/posts
 
 DELETE {{host}}/posts/663451112992cccb0db94db3
 
+###
+
+PATCH {{host}}/posts/663451112992cccb0db94db3
+Content-Type: application/json
+
+{
+    "content": "updated content..."
+}
 
